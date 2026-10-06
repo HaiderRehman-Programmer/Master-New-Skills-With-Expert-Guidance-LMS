@@ -1,4 +1,4 @@
-# MERN Stack Learning Management System (LMS)
+# Master New Skills With Expert Guidance LMS
 
 A full-featured Learning Management System built with the **MERN Stack** (MongoDB, Express.js, React.js, Node.js). This platform supports three distinct user roles — **Admin**, **Instructor**, and **Student** — with complete role-based access control, course management, enrollment workflows, and progress tracking.
 
@@ -16,6 +16,35 @@ Screenshots are in Separate Folder!
 | **Security**     | JWT Authentication, Bcrypt.js, Dotenv, Helmet, CORS                       |
 | **File Uploads** | Multer                                                                    |
 | **API Docs**     | Swagger (OpenAPI 3.0)                                                     |
+
+## System Architecture
+
+```mermaid
+graph TD
+    Client["Client / Browser<br/>(React.js + Vite + Axios)"]
+    
+    subgraph Backend ["Backend API Server (Node.js + Express + TypeScript)"]
+        Router["Express Router & API Endpoints (/api/v1)"]
+        Middleware["Security & Auth Middleware<br/>(JWT, Helmet, CORS, Rate Limiting, Zod)"]
+        Controllers["Feature Modules & Controllers<br/>(Auth, Courses, Lessons, Admin, Reviews, etc.)"]
+    end
+    
+    subgraph Data ["Data & Storage Layer"]
+        MongoDB[("MongoDB Database<br/>(Mongoose ORM)")]
+        Uploads["Static Asset / Media Storage<br/>(Multer File System)"]
+    end
+
+    Client -->|HTTP / JSON Requests| Router
+    Router --> Middleware
+    Middleware --> Controllers
+    Controllers -->|Queries & Data Operations| MongoDB
+    Controllers -->|File Uploads / Downloads| Uploads
+```
+
+### Key Architectural Highlights
+- **Layered Architecture**: Decoupled routes, controllers, middleware, and data models for clean separation of concerns.
+- **RESTful API Specification**: Standardized `/api/v1` routes documented with Swagger / OpenAPI 3.0.
+- **Modular Design**: Feature-based domain modules (Auth, Courses, Lessons, Enrollments, Admin) allowing seamless scalability.
 
 ## Features
 
@@ -147,77 +176,68 @@ Screenshots are in Separate Folder!
 └── package.json                  # Dependencies and scripts
 ```
 
-## Installation
+## How to Start the Project
 
 ### Prerequisites
 
-- **Node.js** v18+
-- **MongoDB** (local or Atlas cloud instance)
+- **Node.js** (v18+)
+- **MongoDB** (Local instance or MongoDB Atlas Cloud URI)
 
-### Setup
+---
 
-1. **Clone the repository**
-   
-   ```bash
-   git clone <repository-url>
-   cd practice-project-1
-   ```
+### Step 1: Install Dependencies
 
-2. **Install backend dependencies**
-   
+1. **Backend Dependencies** (Root folder):
    ```bash
    npm install
    ```
 
-3. **Install frontend dependencies**
-   
+2. **Frontend Dependencies** (`frontend` folder):
    ```bash
    cd frontend
    npm install
    cd ..
    ```
 
-4. **Configure environment variables**
-   
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` with your MongoDB connection string and JWT secret:
-   
-   ```
-   DATABASE_URL=mongodb://localhost:27017/lms_project
-   JWT_SECRET=your_secret_key_minimum_10_chars
-   ```
+---
 
-5. **Seed the database** (creates demo admin, instructor, and student accounts)
-   
-   ```bash
-   npm run db:seed
-   ```
-   
-   Default credentials after seeding:
-   
-   - Admin: `admin@example.com` / `Password1`
-   - Instructor: `instructor@example.com` / `Password1`
-   - Student: `student@example.com` / `Password1`
+### Step 2: Configure Environment Variables
 
-6. **Start the backend server**
-   
-   ```bash
-   npm run dev
-   ```
-   
-   Backend runs on `http://localhost:5000`
+Create or update `.env` in the root directory:
 
-7. **Start the frontend (in a separate terminal)**
-   
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-   
-   Frontend runs on `http://localhost:5173`
+```env
+NODE_ENV=development
+PORT=5000
+DATABASE_URL=mongodb://localhost:27017/lms_project
+JWT_SECRET=supersecretplaceholder
+CLIENT_URL=http://localhost:5173
+```
+
+*(Optional)* Seed the database with demo users:
+```bash
+npm run db:seed
+```
+
+---
+
+### Step 3: Run the Application
+
+The frontend and backend run as separate services. You can start them in separate terminal windows:
+
+#### 1. Start the Backend API Server
+Run in the **root directory**:
+```bash
+npm run dev
+```
+> Server will start at **`http://localhost:5000`**
+
+#### 2. Start the Frontend Vite Development Server
+Run in the **`frontend` directory**:
+```bash
+cd frontend
+npm run dev
+```
+> App will start at **`http://localhost:5173`**
 
 ## Security
 
